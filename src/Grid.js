@@ -6,6 +6,7 @@ class Grid{
         this.yDimension = yDimension;
     }
 
+    // getters and setter
     YDimension (y){
         this.yDimension = y;
     }
@@ -14,9 +15,23 @@ class Grid{
         this.xDimension = xdimension;
     }
 
+
+    YDimension (){
+       return this.yDimension;
+    }
+
+    XDimension(){
+       return this.xDimension;
+    }
+
+
+    //
+
+
+
     print(){
-        console.log("Posicion x del grid:",this.xDimension);
-        console.log("Posicion y del grid:",this.yDimension);
+        console.log("Tamaño x del grid:",this.xDimension);
+        console.log("Tamaño y del grid:",this.yDimension);
     }
 };
 
