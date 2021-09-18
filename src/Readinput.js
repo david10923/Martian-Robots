@@ -14,6 +14,8 @@ const textFile           = "file.txt";
 //  console.log("Datos del robot:",robotsData);
 // }
 
+const maxGrid = 50;
+const maxInstructions = 100;
 
 function parseData(){
    let inputData  = fs.readFileSync(textFile, 'utf8');   
@@ -26,17 +28,43 @@ function parseData(){
 
 //Info about the grid
 function getGridInfo (){
-    return parseData()[0].replace(/(\r\n|\n|\r)/gm,"").split(" ");
+    let gridInfo = parseData()[0].replace(/(\r\n|\n|\r)/gm,"").split(" ");
+
+    if(gridInfo.length > maxGrid){
+        throw new Error("The maximum value for any coordinate is 50!");
+    }else{
+        return gridInfo;
+    }  
 };
 
 //info about the robot
 function getRobotsInfo(){
-    return parseData()[1].replace(/(\r\n|\n|\r)/gm,"").split(" ");
+    // I remove the data of the grid
+    let robotsInfo = parseData();
+    robotsInfo.shift();
+    
+    let arr = [];
+    robotsInfo.forEach( function (row,i){
+        // if(i % 2 === 0){ // if is pair            
+        //     arrRobots.push(row.replace(/(\r\n|\n|\r)/gm,"").split(" "));           
+        // }else{
+        //     arrMovements.push(row.replace(/(\r\n|\n|\r)/gm,"").split(" "));
+        // }
+        arr.push(row.replace(/(\r\n|\n|\r)/gm,"").split(" "));
+    });
+    
+    return arr;
 };
 
 //the info about the steps the spaceship shuold follow
 function getStepsInfo(){
-    return parseData()[2].replace(/(\r\n|\n|\r)/gm,"").split(" ");
+
+    let stepsInfo = parseData()[2].replace(/(\r\n|\n|\r)/gm,"").split(" ");
+
+    if(stepsInfo.length > maxInstructions){
+        throw new Error("All instruction strings will be less than 100 characters in length!");
+    }else
+        return stepsInfo;
 }
 
 

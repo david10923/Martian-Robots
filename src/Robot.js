@@ -1,11 +1,13 @@
 "use strict"
 
 
-class SpaceShip{
-    constructor(xCoordinate,yCoordinate,orientation){
+class Robot{
+    constructor(xCoordinate,yCoordinate,orientation,movements){
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.orientation = orientation;
+        this.movements = movements;
+        this.isLost= false;
     }
 
     // getters and setter
@@ -33,10 +35,13 @@ class SpaceShip{
         this.orientation = orientation;
     }
 
+    setMovements(movements){
+        this.movements= movements;
+    }
+
 
     //those are the movements that the spaceShip should do
     movements(nextStep){ 
-
         switch(nextStep){
             case "L":
                 this.moveLeft();
@@ -109,6 +114,11 @@ class SpaceShip{
         console.log("Orientation de la nave:",this.orientation);
     }
 
+    printFinalPosition(){
+        console.log(this.xCoordinate+ " ",this.yCoordinate+ " ",this.orientation);
+    }
+
+
 }
 
-module.exports =SpaceShip ;
+module.exports =Robot ;

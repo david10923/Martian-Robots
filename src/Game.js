@@ -1,57 +1,99 @@
 const ReadInput         = require('./ReadInput');
-const SpaceShip     = require('./SpaceShip');
+const Robot     = require('./Robot');
 const Grid          = require('./Grid');
+const underscore    = require('underscore');
 
 
 
 class Game{
     
-    constructor(index){
-        this.spaceShip = new SpaceShip();
-        this.grid = new Grid();
-        this.movements= ReadInput.getStepsInfo();
+    constructor(){
+        this.grid = new Grid();       
         this.gridInfo = ReadInput.getGridInfo();
-        this.spaceShipInfo = ReadInput.getRobotsInfo();
-        this.Initializer();
-        this.Play();     
-        this.isLost = false;   
+        this.robotsInfo = ReadInput.getRobotsInfo();
+        let robots = [];
+        let robotsOutOfBounds = [];
+        this.GridInitializer();   
+        this.RobotsInicializer(); 
+        this.Play();
     }
 
 
     // where the objets are build
-    Initializer() {        
-        
-        // let gridInfo = ReadInput.getGridInfo();        
-        // let spaceShipInfo = ReadInput.getRobotsInfo();
-
-        this.spaceShip.XPosition(spaceShipInfo[0]);
-        this.spaceShip.YPosition(spaceShipInfo[1]);
-        this.spaceShip.Orientation(spaceShipInfo[2]);
-
-        this.grid.YDimension(gridInfo[0]);
-        this.grid.XDimension(gridInfo[1]);
+    GridInitializer() {
+        this.grid.YDimension(this.gridInfo[0]);
+        this.grid.XDimension(this.gridInfo[1]);
     }
 
 
-    Play(){
-
-        
+    RobotsInicializer(){
+        // parse the movements and move the spaceship   
+        let robot ;
+        this.robotsInfo.forEach(function (row,i) {
+            if(i % 2 === 0){ // if is pair            
+                robot = new Robot(row[0],row[1],row[2]);
+                this.robots.push(robot);
+            }else{
+                robot.setMovements(row);
+            }
+        });        
     }
 
 
-    // the spaceShip should be inside the grid
-    checkSpaceShipPosition(){     
-        if(this.spaceShip.xCoordinate() > this.grid.XDimension() || this.spaceShip.xCoordinate() < this.grid.XDimension()){ // ERROR
-            this.isLost = true;
+    Play(){        
+        let finalPosition= [];        
+        robots.forEach(robot => {
+            while(robot.movements.length >0){    
+                let move= robot.movements.shift(); 
+                if(move === 'F'){ // check if other spaceship has gone out
+                    let robotAux = robot;
+                    //i check if a robot has gone out the grid before
+                    let found = robotsOutOfBounds.find( element => {
+                        if(element.xCoordinate == robotAux.xCoordinate 
+                            && element.yCoordinate == robotAux.yCoordinate && element.orientation === robotAux.orientation){
+                                return true;
+                        }else return false;
+                    });
+
+                    if(!found){
+                        robot.movements(move);
+                        if(this.checkRobotPosition()){
+                            robotsOutOfBounds.push(robotAux);
+                        } 
+                    }
+                }else{
+                    robot.movements(move);
+                }   
+
+            }
+
+            // FALTAAAAAAAAAAAAAAAAAAA
+            if(robot.isLost){
+                finalPosition.push();
+            }else{
+
+            }
+
+        });
+    }
+
+
+    // the robot should be inside the grid
+    checkRobotPosition(){       
+        let lost = false;
+
+        if(this.robot.xCoordinate > this.grid.XDimension || this.robot.xCoordinate < this.grid.XDimension){ // ERROR
+            this.robot.isLost = true;    
+            lost = true;        
         }
-        else if(this.spaceShip.yCoordinate() > this.grid.YDimension() || this.spaceShip.yCoordinate() < this.grid.yDimension()){ // ERORR
-            this.isLost = true;
+        else if(this.robot.yCoordinate > this.grid.YDimension || this.robot.yCoordinate < this.grid.yDimension){ // ERORR
+            this.robot.isLost = true;  
+            lost = true;
         }
-    }
 
-    
+        return lost;
+    }
 
 }
 
-
-let game = new Game();
+module.exports = Game;
