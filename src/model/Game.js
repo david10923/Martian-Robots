@@ -11,10 +11,10 @@ class Game{
         this.grid = new Grid();       
         this.gridInfo = ReadInput.getGridInfo();
         this.robotsInfo = ReadInput.getRobotsInfo();
-        let robots = [];
-        let robotsOutOfBounds = [];
+        this.robots = [];
+        this.robotsOutOfBounds = [];
         this.GridInitializer();   
-        this.RobotsInicializer(); 
+        this.RobotsInicializer();
         this.Play();
     }
 
@@ -29,25 +29,34 @@ class Game{
     RobotsInicializer(){
         // parse the movements and move the spaceship   
         let robot ;
+        let arr =[];
         this.robotsInfo.forEach(function (row,i) {
             if(i % 2 === 0){ // if is pair            
                 robot = new Robot(row[0],row[1],row[2]);
-                this.robots.push(robot);
+                arr.push(robot);
             }else{
                 robot.setMovements(row);
             }
         });        
+
+        this.robots = arr;
+    }
+
+
+    ParseFinalState(finalPosition){
+        console.log("La posicion final es:");
+        console.log(finalPosition);
     }
 
 
     Play(){        
         let finalPosition= [];        
-        robots.forEach(robot => {
-            while(robot.movements.length >0){    
+        this.robots.forEach(robot => {
+            while(robot.movements.length >0 || robot.isLost){    
                 let move= robot.movements.shift(); 
-                if(move === 'F'){ // check if other spaceship has gone out
+                if(move === 'F'){ 
                     let robotAux = robot;
-                    //i check if a robot has gone out the grid before
+                    //check if a robot has gone out the grid before in this position and with the same orientation
                     let found = robotsOutOfBounds.find( element => {
                         if(element.xCoordinate == robotAux.xCoordinate 
                             && element.yCoordinate == robotAux.yCoordinate && element.orientation === robotAux.orientation){
@@ -59,6 +68,7 @@ class Game{
                         robot.movements(move);
                         if(this.checkRobotPosition()){
                             robotsOutOfBounds.push(robotAux);
+                            finalPosition.push(robotAux);
                         } 
                     }
                 }else{
@@ -67,14 +77,14 @@ class Game{
 
             }
 
-            // FALTAAAAAAAAAAAAAAAAAAA
-            if(robot.isLost){
-                finalPosition.push();
-            }else{
-
+            // if the robot is not lost, is pushed in the final arrayList
+            if(!robot.isLost){
+                finalPosition.push(robot);
             }
 
         });
+        
+        FinalState(finalPosition);
     }
 
 

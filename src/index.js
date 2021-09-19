@@ -6,16 +6,13 @@ const fs                 = require('fs');
 
 let game = new Game();
 
+
+
 let write = function(output){
     fs.writeFile('Output.txt', data, (err) => {
         if (err) throw err;
     })
 };
 
-
-
-
-
-module.exports = 
 
 
