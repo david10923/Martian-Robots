@@ -39,5 +39,5 @@ Here you can check the file design:
 
 
 # Extra info
-To find out more info about the game you can check the MartianRobots pdf added in the root directory.
+To find out more info about the game you can check the [MartianRobots.pdf](https://github.com/david10923/Martian-Robots/blob/main/MartianRobots.pdf) added in the root directory.
 
