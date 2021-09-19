@@ -13,14 +13,12 @@ class Game{
         this.robots = [];
         this.robotsOutOfBounds = [];
         this.finalInfo = [];
-        let robot;
         this.GridInitializer();   
         this.RobotsInicializer();
-        //this.Play();
     }
 
 
-    // where the objets are build
+    // where the grid is built
     GridInitializer() {
         this.grid = new Grid(parseInt(this.gridInfo[0]),parseInt(this.gridInfo[1]));
     }
@@ -42,7 +40,7 @@ class Game{
         this.robots = arr;
     }
 
-
+    // this method is used to write the data in the correct format
     ParseFinalState(){
         let output="";
 
@@ -101,8 +99,7 @@ class Game{
             }
 
         });
-        this.finalInfo = finalPosition;
-       // this.ParseFinalState(finalPosition);
+        this.finalInfo = finalPosition;       
     }
 
 

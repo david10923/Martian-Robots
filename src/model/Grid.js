@@ -24,11 +24,6 @@ class Grid{
        return this.xDimension;
     }
 
-
-    //
-
-
-
     print(){
         console.log("Tamaño x del grid:",this.xDimension);
         console.log("Tamaño y del grid:",this.yDimension);
