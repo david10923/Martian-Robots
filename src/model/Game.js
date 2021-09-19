@@ -1,4 +1,4 @@
-const ReadInput         = require('./ReadInput');
+const ReadInput         = require('../ParseData/iodata');
 const Robot     = require('./Robot');
 const Grid          = require('./Grid');
 const underscore    = require('underscore');
@@ -7,35 +7,35 @@ const underscore    = require('underscore');
 
 class Game{
     
-    constructor(){
-        this.grid = new Grid();       
+    constructor(){      
         this.gridInfo = ReadInput.getGridInfo();
         this.robotsInfo = ReadInput.getRobotsInfo();
         this.robots = [];
         this.robotsOutOfBounds = [];
+        this.finalInfo = [];
+        let robot;
         this.GridInitializer();   
         this.RobotsInicializer();
-        this.Play();
+        //this.Play();
     }
 
 
     // where the objets are build
     GridInitializer() {
-        this.grid.YDimension(this.gridInfo[0]);
-        this.grid.XDimension(this.gridInfo[1]);
+        this.grid = new Grid(parseInt(this.gridInfo[0]),parseInt(this.gridInfo[1]));
     }
 
 
     RobotsInicializer(){
-        // parse the movements and move the spaceship   
-        let robot ;
+        // parse the movements and move the spaceship  
         let arr =[];
+        let robot ;
         this.robotsInfo.forEach(function (row,i) {
             if(i % 2 === 0){ // if is pair            
-                robot = new Robot(row[0],row[1],row[2]);
+                robot = new Robot(parseInt(row[0]),parseInt(row[1]),row[2]);
                 arr.push(robot);
             }else{
-                robot.setMovements(row);
+                robot.setMovements(row[0].split(''));
             }
         });        
 
@@ -43,65 +43,76 @@ class Game{
     }
 
 
-    ParseFinalState(finalPosition){
-        console.log("La posicion final es:");
-        console.log(finalPosition);
+    ParseFinalState(){
+        let output="";
+
+        this.finalInfo.forEach( element=>{
+            output += element.xCoordinate + " "+ element.yCoordinate + " "+ element.orientation;
+            if(element.isLost){
+                output += " "+ "LOST";
+            }
+            output += "\n";
+        });
+
+       return output;
     }
 
 
     Play(){        
         let finalPosition= [];        
-        this.robots.forEach(robot => {
-            while(robot.movements.length >0 || robot.isLost){    
-                let move= robot.movements.shift(); 
-                if(move === 'F'){ 
-                    let robotAux = robot;
+        this.robots.forEach((robot,i) => {
+            
+            while(robot.movements.length != 0 && robot.isLost == false){           
+                let move = robot.movements.shift();         
+                if(move == 'F'){ 
+                    let robotAux = {
+                        xCoordinate : robot.xCoordinate,
+                        yCoordinate : robot.yCoordinate,
+                        orientation : robot.orientation,
+                        isLost : false
+                    };
                     //check if a robot has gone out the grid before in this position and with the same orientation
-                    let found = robotsOutOfBounds.find( element => {
-                        if(element.xCoordinate == robotAux.xCoordinate 
-                            && element.yCoordinate == robotAux.yCoordinate && element.orientation === robotAux.orientation){
-                                return true;
-                        }else return false;
+                    let found = false;
+                    this.robotsOutOfBounds.forEach(function(element){
+                        if(element.xCoordinate == robot.xCoordinate 
+                            && element.yCoordinate == robot.yCoordinate && element.orientation == robot.orientation.toString()){
+                                found= true;
+                        }
                     });
-
+                   
                     if(!found){
-                        robot.movements(move);
-                        if(this.checkRobotPosition()){
-                            robotsOutOfBounds.push(robotAux);
-                            finalPosition.push(robotAux);
+                        robot.move(move);                         
+                        if(this.checkRobotPosition(robot) == true){                            
+                            this.robotsOutOfBounds.push(robotAux);
+                            robotAux.isLost = true;
+                            robot.isLost = true;
+                            finalPosition.push(robotAux);                            
                         } 
                     }
-                }else{
-                    robot.movements(move);
-                }   
+                }else{        
+                    robot.move(move);                  
+                }
+                              
 
             }
-
             // if the robot is not lost, is pushed in the final arrayList
-            if(!robot.isLost){
+            if(robot.isLost == false){
                 finalPosition.push(robot);
             }
 
         });
-        
-        FinalState(finalPosition);
+        this.finalInfo = finalPosition;
+       // this.ParseFinalState(finalPosition);
     }
 
 
     // the robot should be inside the grid
-    checkRobotPosition(){       
-        let lost = false;
-
-        if(this.robot.xCoordinate > this.grid.XDimension || this.robot.xCoordinate < this.grid.XDimension){ // ERROR
-            this.robot.isLost = true;    
-            lost = true;        
-        }
-        else if(this.robot.yCoordinate > this.grid.YDimension || this.robot.yCoordinate < this.grid.yDimension){ // ERORR
-            this.robot.isLost = true;  
-            lost = true;
+    checkRobotPosition(robot){ 
+        if(robot.xCoordinate > this.grid.xDimension ||  robot.xCoordinate < 0 || robot.yCoordinate > this.grid.yDimension || robot.yCoordinate < 0){             
+            return true;        
         }
 
-        return lost;
+        return false
     }
 
 }

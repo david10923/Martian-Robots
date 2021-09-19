@@ -2,11 +2,11 @@
 
 
 class Robot{
-    constructor(xCoordinate,yCoordinate,orientation,movements){
+    constructor(xCoordinate,yCoordinate,orientation){
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.orientation = orientation;
-        this.movements = movements;
+        this.movements  = "";
         this.isLost= false;
     }
 
@@ -41,7 +41,7 @@ class Robot{
 
 
     //those are the movements that the spaceShip should do
-    movements(nextStep){ 
+    move(nextStep){ 
         switch(nextStep){
             case "L":
                 this.moveLeft();
@@ -93,25 +93,28 @@ class Robot{
     moveFordward(){
         switch(this.orientation){
             case "N":
-               this.yCoordinate +=1;
+               this.yCoordinate++;
                 break;
             case "S":
-                this.yCoordinate -=1;
+                this.yCoordinate--;
                 break;
             case "E":
-                this.xCoordinate +=1;
+                this.xCoordinate ++;
                 break;
             case "W":
-                this.xCoordinate -=1;
+                this.xCoordinate--;
                 break;
         }
     }
 
 
     print(){
-        console.log("Posicion x de la nave:",this.xCoordinate);
-        console.log("Posicion y de la nave:",this.yCoordinate);
-        console.log("Orientation de la nave:",this.orientation);
+        console.log("Posicion x del robot:",this.xCoordinate);
+        console.log("Posicion y del robot:",this.yCoordinate);
+        console.log("Orientation del robot:",this.orientation);
+        console.log("El robot se ha salido:",this.isLost.toString());
+        console.log("Movimientos del robot:",this.movements);
+       
     }
 
     printFinalPosition(){
@@ -121,4 +124,4 @@ class Robot{
 
 }
 
-module.exports =Robot ;
+module.exports = Robot ;

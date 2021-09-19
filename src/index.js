@@ -1,18 +1,15 @@
 "use strict"
-const Game               = require('./Game');
+const Game               = require('../src/model/Game');
+const write              = require('../src/ParseData/iodata');
 const fs                 = require('fs');
 
 //read the file and init the game
 
 let game = new Game();
+game.Play();
+write.write(game.ParseFinalState());
 
 
-
-let write = function(output){
-    fs.writeFile('Output.txt', data, (err) => {
-        if (err) throw err;
-    })
-};
 
 
 
