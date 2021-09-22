@@ -1,33 +1,43 @@
-"use strict"
+'use strict'
 
-class Grid{
-    constructor(xDimension,yDimension){
-        this.xDimension = xDimension;
-        this.yDimension = yDimension;
+class Grid {
+
+    constructor (xDimension, yDimension) {
+
+        this.xDimension = xDimension
+        this.yDimension = yDimension
+
     }
 
-    // getters and setter
-    YDimension (y){
-        this.yDimension = y;
+    //getters and setter
+    YDimension (identifier) {
+
+        this.yDimension = identifier
+
     }
 
-    XDimension(xdimension){
-        this.xDimension = xdimension;
+    XDimension (xdimension) {
+
+        this.xDimension = xdimension
+
     }
 
 
-    YDimension (){
-       return this.yDimension;
-    }
+    //print () {
 
-    XDimension(){
-       return this.xDimension;
-    }
+    /*
+     * console.log(
+     * 'Tamaño x del grid:',
+     * this.xDimension
+     * )
+     * console.log(
+     * 'Tamaño y del grid:',
+     * this.yDimension
+     * )
+     */
 
-    print(){
-        console.log("Tamaño x del grid:",this.xDimension);
-        console.log("Tamaño y del grid:",this.yDimension);
-    }
-};
+    //}
 
-module.exports = Grid;
+}
+
+module.exports = Grid
